@@ -26,11 +26,11 @@
      copy:
       src: http2.conf
       dest: /etc/httpd/conf/httpd.conf
+     notify: restart
    - name: copy html file to webserver
      copy:
       src: iti.html
       dest: /var/www/html/private/iti.html
-     notify: restart
    - name: copy .htaccess file to webserver
      copy:
       src: .htaccess
