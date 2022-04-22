@@ -1,0 +1,44 @@
+---
+- name: This play to run an apache web server
+  hosts: worker01
+  become: true
+  tasks:
+   - name: install apache
+     yum:
+      name: httpd
+   - name: start and enable apacje service
+     service:
+      name: httpd
+      state: started
+      enabled: true
+   - name: open firewall for http
+     firewalld:
+      service: http
+      permanent: yes
+      state: enabled
+      immediate: true
+   - name: create private directory
+     file:
+      path: /var/www/html/private
+      state: directory
+      recurse: yes
+   - name: copy conf file to webserver
+     copy:
+      src: http2.conf
+      dest: /etc/httpd/conf/httpd.conf
+   - name: copy html file to webserver
+     copy:
+      src: iti.html
+      dest: /var/www/html/private/iti.html
+     notify: restart
+   - name: copy .htaccess file to webserver
+     copy:
+      src: .htaccess
+      dest: /var/www/html/private/.htaccess
+   - name: add user and password for authentication
+     command: htpasswd -bc /etc/itipassword sylvia 1515
+  handlers:
+   - name: restart
+     service:
+       name: httpd
+       state: restarted
