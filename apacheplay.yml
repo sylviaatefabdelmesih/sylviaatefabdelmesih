@@ -36,7 +36,7 @@
       src: .htaccess
       dest: /var/www/html/private/.htaccess
    - name: add user and password for authentication
-     command: htpasswd -bc /etc/itipassword sylvia 1515
+     command: htpasswd -bc /etc/itipassword sylvia 2424
   handlers:
    - name: restart
      service:
